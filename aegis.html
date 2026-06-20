@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Aegis — Enterprise AI Operating Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#000;
+    --bg-2:#050505;
+    --surface:#0a0a0a;
+    --surface-2:#111;
+    --border:#1a1a1a;
+    --border-2:#262626;
+    --text:#fff;
+    --text-2:#a1a1aa;
+    --text-3:#71717a;
+    --accent:#fff;
+    --good:#34d399;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    font-size:16px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  /* Subtle grid background */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size:64px 64px;
+    mask-image:radial-gradient(ellipse 90% 80% at 50% 40%, #000 30%, transparent 80%);
+    -webkit-mask-image:radial-gradient(ellipse 90% 80% at 50% 40%, #000 30%, transparent 80%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(800px 400px at 50% -10%, rgba(255,255,255,.04), transparent 70%);
+  }
+  main, header, footer{position:relative;z-index:1}
+
+  /* ===== NAV ===== */
+  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(0,0,0,.6);border-bottom:1px solid rgba(255,255,255,.06)}
+  .nav-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:18px 40px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:600;font-size:18px;letter-spacing:-.01em}
+  .hex{
+    width:28px;height:28px;display:inline-grid;place-items:center;
+    border:1.5px solid #fff;border-radius:6px;
+    position:relative;
+  }
+  .hex::before{
+    content:"";width:10px;height:10px;border:1.5px solid #fff;
+    transform:rotate(45deg);
+  }
+  nav.center{display:flex;gap:8px}
+  nav.center a{
+    color:var(--text-2);text-decoration:none;font-size:15px;font-weight:400;
+    padding:8px 18px;border-radius:8px;transition:color .2s;
+  }
+  nav.center a:hover{color:#fff}
+  .cta{
+    display:inline-flex;align-items:center;gap:10px;
+    background:#fff;color:#000;text-decoration:none;
+    padding:12px 22px;border-radius:999px;font-weight:500;font-size:15px;
+    transition:transform .15s, box-shadow .15s;
+  }
+  .cta:hover{transform:translateY(-1px);box-shadow:0 10px 30px rgba(255,255,255,.15)}
+  .cta .arrow{
+    width:18px;height:18px;display:inline-grid;place-items:center;
+  }
+
+  /* ===== HERO ===== */
+  .hero{padding:140px 40px 160px;text-align:center}
+  .pill{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:8px 18px;border:1px solid var(--border-2);border-radius:999px;
+    color:var(--text);font-size:14px;font-weight:400;
+    background:rgba(255,255,255,.02);
+  }
+  .pill .dot{
+    width:8px;height:8px;border-radius:50%;background:#fff;
+    box-shadow:0 0 12px rgba(255,255,255,.7);
+    animation:pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse{50%{opacity:.5}}
+
+  h1.hero-title{
+    margin:40px auto 28px;
+    font-size:clamp(48px, 8vw, 112px);
+    font-weight:800;
+    line-height:1.02;
+    letter-spacing:-.035em;
+    max-width:1500px;
+  }
+  h1.hero-title .em{
+    font-style:italic;font-weight:700;
+    background:linear-gradient(180deg,#fff 0%,#666 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    padding:0 .05em;
+  }
+  .hero p.sub{
+    max-width:780px;margin:0 auto;color:var(--text-2);font-size:18px;line-height:1.6;font-weight:400;
+  }
+  .hero-cta-row{margin-top:40px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .ghost{
+    display:inline-flex;align-items:center;gap:10px;
+    border:1px solid var(--border-2);background:transparent;
+    padding:12px 22px;border-radius:999px;font-weight:500;font-size:15px;color:#fff;text-decoration:none;
+    transition:background .15s, border-color .15s;
+  }
+  .ghost:hover{background:rgba(255,255,255,.04);border-color:#3a3a3a}
+
+  /* ===== Section base ===== */
+  section{padding:120px 40px;position:relative}
+  .wrap{max-width:1280px;margin:0 auto}
+  .section-head{max-width:880px;margin:0 auto 80px;text-align:center}
+  .eyebrow{
+    display:inline-block;font-size:13px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--text-3);font-weight:500;margin-bottom:24px;
+  }
+  h2{
+    font-size:clamp(40px,5.5vw,72px);
+    font-weight:800;line-height:1.05;letter-spacing:-.03em;
+    margin:0 0 24px;
+  }
+  h2 .em{
+    font-style:italic;font-weight:700;
+    background:linear-gradient(180deg,#fff 0%,#666 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  p.lead{font-size:18px;color:var(--text-2);max-width:680px;margin:0 auto;line-height:1.6}
+  .divider{height:1px;background:linear-gradient(90deg,transparent,var(--border-2),transparent)}
+
+  /* ===== Problem cards ===== */
+  .problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  @media(max-width:960px){.problem-grid{grid-template-columns:1fr}}
+  .problem-card{
+    background:linear-gradient(180deg,var(--surface) 0%,#020202 100%);
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:40px 36px;
+    position:relative;
+    overflow:hidden;
+    transition:border-color .25s, transform .25s;
+  }
+  .problem-card:hover{border-color:var(--border-2);transform:translateY(-4px)}
+  .problem-card::before{
+    content:"";position:absolute;inset:0;border-radius:24px;
+    background:radial-gradient(400px 200px at 50% -20%, rgba(255,255,255,.06), transparent 60%);
+    pointer-events:none;
+  }
+  .pn{
+    font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text-3);
+    margin-bottom:32px;display:flex;align-items:center;gap:10px;
+  }
+  .pn::after{content:"";flex:1;height:1px;background:var(--border)}
+  .problem-card h3{
+    font-size:24px;font-weight:700;letter-spacing:-.02em;margin:0 0 14px;line-height:1.2;
+  }
+  .problem-card p{margin:0;color:var(--text-2);font-size:15px;line-height:1.6}
+  .problem-card .stat{
+    margin-top:28px;padding-top:24px;border-top:1px solid var(--border);
+    display:flex;align-items:baseline;gap:8px;
+  }
+  .problem-card .stat b{
+    font-size:36px;font-weight:700;letter-spacing:-.02em;
+    background:linear-gradient(180deg,#fff,#888);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    font-family:'Inter',sans-serif;
+  }
+  .problem-card .stat span{color:var(--text-3);font-size:13px}
+
+  /* ===== Solution rows ===== */
+  .sol-row{
+    display:grid;grid-template-columns:120px 1fr 1fr;gap:48px;
+    padding:48px 0;border-top:1px solid var(--border);align-items:start;
+  }
+  .sol-row:last-child{border-bottom:1px solid var(--border)}
+  @media(max-width:960px){.sol-row{grid-template-columns:1fr;gap:20px;padding:36px 0}}
+  .sol-num{
+    font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--text-3);
+    letter-spacing:1px;
+  }
+  .sol-title{font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1.15;margin:0}
+  .sol-title em{
+    font-style:italic;font-weight:700;
+    background:linear-gradient(180deg,#fff,#777);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .sol-desc{color:var(--text-2);font-size:16px;line-height:1.7;margin:0}
+  .sol-tags{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+  .chip{
+    font-size:12px;padding:5px 12px;border-radius:999px;
+    border:1px solid var(--border-2);color:var(--text-2);background:rgba(255,255,255,.02);
+  }
+
+  /* ===== Example trace ===== */
+  .trace-wrap{
+    background:linear-gradient(180deg,var(--surface) 0%,#000 100%);
+    border:1px solid var(--border);
+    border-radius:28px;
+    padding:40px;
+    margin-top:48px;
+    position:relative;overflow:hidden;
+  }
+  .trace-wrap::before{
+    content:"";position:absolute;inset:0;border-radius:28px;
+    background:radial-gradient(600px 300px at 50% -20%, rgba(255,255,255,.05), transparent 70%);
+    pointer-events:none;
+  }
+  .ex-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;position:relative}
+  .ex-tab{
+    padding:10px 18px;border-radius:999px;
+    background:rgba(255,255,255,.02);border:1px solid var(--border-2);
+    color:var(--text-2);font-size:13.5px;font-weight:500;cursor:pointer;
+    transition:all .2s;font-family:inherit;
+  }
+  .ex-tab:hover{color:#fff}
+  .ex-tab.active{background:#fff;color:#000;border-color:#fff}
+
+  .ex-q{
+    font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1.3;
+    margin:0 0 28px;color:#fff;
+  }
+  .ex-q::before{content:"" "";color:var(--text-3);margin-right:4px}
+
+  .chat{display:flex;flex-direction:column;gap:14px;position:relative}
+  .msg{display:grid;grid-template-columns:40px 1fr;gap:16px;align-items:start}
+  .av{
+    width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
+    font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;
+  }
+  .msg.user .av{background:#1a1a1a;color:var(--text-2);border:1px solid var(--border-2)}
+  .msg.tool .av{background:#0d0d0d;color:#fff;border:1px solid var(--border-2)}
+  .msg.agent .av{background:#fff;color:#000}
+  .bubble{
+    background:rgba(255,255,255,.025);border:1px solid var(--border);
+    border-radius:14px;padding:16px 18px;font-size:14.5px;line-height:1.6;color:var(--text);
+  }
+  .msg.user .bubble{background:#0d0d0d}
+  .msg.tool .bubble{
+    background:rgba(255,255,255,.015);
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--text-2);
+    border-style:dashed;
+  }
+  .tool-lbl{display:block;font-family:'Inter',sans-serif;color:#fff;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+  .verdict{
+    margin-top:10px;padding:16px 18px;border-radius:12px;
+    background:linear-gradient(180deg,rgba(52,211,153,.08),rgba(52,211,153,.02));
+    border:1px solid rgba(52,211,153,.25);
+  }
+  .verdict strong{display:block;color:var(--good);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+  .panel{display:none}
+  .panel.active{display:block;animation:fade .3s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .mono-inline{font-family:'JetBrains Mono',monospace;font-size:.92em;color:#fff;background:rgba(255,255,255,.06);padding:1px 6px;border-radius:4px}
+
+  /* ===== Architecture ===== */
+  .arch{display:grid;gap:18px;max-width:1080px;margin:0 auto}
+  .arch-row{
+    display:grid;grid-template-columns:60px 220px 1fr;gap:32px;align-items:center;
+    padding:32px;
+    background:linear-gradient(180deg,var(--surface) 0%,#000 100%);
+    border:1px solid var(--border);
+    border-radius:20px;
+    position:relative;transition:transform .2s, border-color .2s;
+  }
+  .arch-row:hover{border-color:var(--border-2);transform:translateX(4px)}
+  @media(max-width:820px){.arch-row{grid-template-columns:1fr;gap:14px;padding:24px}}
+  .arch-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text-3);letter-spacing:1px}
+  .arch-name{display:flex;flex-direction:column;gap:6px}
+  .arch-name small{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);font-weight:500}
+  .arch-name strong{font-size:22px;font-weight:700;letter-spacing:-.01em;color:#fff;font-family:'Inter',sans-serif}
+  .arch-desc{color:var(--text-2);font-size:15px;line-height:1.6;margin:0}
+
+  /* ===== Governance + Metrics combined ===== */
+  .gov-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  @media(max-width:960px){.gov-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:580px){.gov-grid{grid-template-columns:1fr}}
+  .gov{
+    background:linear-gradient(180deg,var(--surface) 0%,#000 100%);
+    border:1px solid var(--border);border-radius:20px;padding:28px;
+    transition:border-color .2s, transform .2s;
+  }
+  .gov:hover{border-color:var(--border-2);transform:translateY(-3px)}
+  .gov-ic{
+    width:40px;height:40px;border-radius:10px;
+    border:1px solid var(--border-2);background:rgba(255,255,255,.03);
+    display:grid;place-items:center;margin-bottom:18px;
+  }
+  .gov-ic svg{width:18px;height:18px;color:#fff}
+  .gov h4{font-size:16px;font-weight:600;margin:0 0 8px;letter-spacing:-.01em;color:#fff}
+  .gov p{font-size:13.5px;color:var(--text-2);margin:0;line-height:1.55}
+
+  .metrics{margin-top:80px;display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid var(--border);border-radius:24px;overflow:hidden;background:linear-gradient(180deg,var(--surface) 0%,#000 100%)}
+  @media(max-width:960px){.metrics{grid-template-columns:repeat(2,1fr)}}
+  .metric{
+    padding:36px 24px;text-align:center;
+    border-right:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+  }
+  .metric:last-child{border-right:none}
+  @media(max-width:960px){
+    .metric{border-right:1px solid var(--border)}
+    .metric:nth-child(2n){border-right:none}
+  }
+  .metric .val{
+    font-size:48px;font-weight:800;letter-spacing:-.04em;
+    background:linear-gradient(180deg,#fff,#666);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    font-family:'Inter',sans-serif;line-height:1;
+  }
+  .metric .lbl{margin-top:10px;color:var(--text-3);font-size:13px;line-height:1.45}
+
+  /* ===== Closing CTA ===== */
+  .closer{padding:140px 40px;text-align:center}
+  .closer h2{margin-bottom:32px}
+  .closer p.lead{margin-bottom:36px}
+
+  /* ===== Footer ===== */
+  footer{
+    border-top:1px solid var(--border);padding:40px;
+    display:flex;justify-content:space-between;align-items:center;
+    color:var(--text-3);font-size:13px;flex-wrap:wrap;gap:14px;
+    max-width:1280px;margin:0 auto;
+  }
+
+  /* Reveal */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease, transform .8s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  @media(max-width:680px){
+    .nav-inner{padding:16px 20px}
+    nav.center{display:none}
+    section{padding:80px 20px}
+    .hero{padding:80px 20px 100px}
+    .trace-wrap{padding:24px}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <span class="hex"></span>
+      <span>Aegis <span style="color:var(--text-3);font-weight:400;font-size:14px;margin-left:6px">· for Chaayos</span></span>
+    </div>
+    <nav class="center">
+      <a href="#problem">Problem</a>
+      <a href="#solution">Solution</a>
+      <a href="#example">Example</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#governance">Governance</a>
+    </nav>
+    <a class="cta" href="#closer">
+      last
+      <span class="arrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+    </a>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================ HERO ============================ -->
+<section class="hero">
+  <span class="pill"><span class="dot"></span>Internal · Chaayos Tech · PRD v1.0</span>
+  <h1 class="hero-title">
+    Our engineers shouldn't have to <span class="em">guess where it broke</span>.
+  </h1>
+  <p class="sub">Aegis is an internal AI platform for Chaayos — built so our engineers diagnose live systems in seconds instead of hours, so different teams stop rebuilding the same AI plumbing, and so our non-tech teammates can spin up their own contextual agents without writing code.</p>
+  <div class="hero-cta-row">
+    <a class="cta" href="#problem">See our problem
+      <span class="arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></span>
+    </a>
+    <a class="ghost" href="#example">Watch a diagnosis</a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================ 1. PROBLEM ============================ -->
+<section id="problem">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">01 — The Problem</span>
+      <h2>Three problems. <span class="em">We hit them every week</span>.</h2>
+      <p class="lead">Aegis exists because our current way of working has three specific, expensive gaps. Each one compounds the others.</p>
+    </div>
+
+    <div class="problem-grid">
+      <div class="problem-card reveal">
+        <div class="pn">PROBLEM 01</div>
+        <h3>Debugging takes hours, not minutes.</h3>
+        <p>Our engineers manually correlate logs, configs, code paths, and database state to root-cause production issues — across POS, ordering, cafe ops, and customer systems. There's no live, queryable understanding of how our services actually behave. Every investigation starts from zero.</p>
+        <div class="stat"><b>Hours</b><span>Per production investigation</span></div>
+      </div>
+
+      <div class="problem-card reveal">
+        <div class="pn">PROBLEM 02</div>
+        <h3>No centralized AI. Each team rebuilds the same thing.</h3>
+        <p>Different Chaayos teams have started shipping their own bots, RAG stacks, and agent loops with no shared infrastructure. Today this doesn't exist as one platform — we'd end up with duplicated codebases, inconsistent UX, no shared governance, and AI that goes stale the moment a service changes.</p>
+        <div class="stat"><b>N×</b><span>Duplicate AI work across teams</span></div>
+      </div>
+
+      <div class="problem-card reveal">
+        <div class="pn">PROBLEM 03</div>
+        <h3>Non-tech teammates can't build their own agents.</h3>
+        <p>Cafe ops, procurement, finance, and support teams hold most of our institutional knowledge. But creating a contextual AI today needs an engineer or an IT ticket. So that knowledge stays trapped in PDFs, spreadsheets, and inboxes — and the same questions get re-answered by hand every week.</p>
+        <div class="stat"><b>0</b><span>Self-service paths today</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================ 2. SOLUTION ============================ -->
+<section id="solution">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">02 — The Solution</span>
+      <h2>How Aegis <span class="em">solves all three</span>.</h2>
+      <p class="lead">One internal platform. One integration. Every problem above gets a direct, measurable fix for our team.</p>
+    </div>
+
+    <div>
+      <div class="sol-row reveal">
+        <div class="sol-num">→ 01</div>
+        <div>
+          <h3 class="sol-title">A Diagnostic Agent that <em>investigates live systems</em>.</h3>
+          <div class="sol-tags">
+            <span class="chip">Code RAG</span><span class="chip">Graph traversal</span><span class="chip">DB read</span><span class="chip">Explainable</span>
+          </div>
+        </div>
+        <p class="sol-desc">Aegis pulls understanding directly from our source code, database state, runtime logs, and configuration. The Diagnostic Agent reasons over the live system — not stale prompt rules — and explains every conclusion with the exact files, queries, and config keys it used. Our engineers see the root cause, not a guess.</p>
+      </div>
+
+      <div class="sol-row reveal">
+        <div class="sol-num">→ 02</div>
+        <div>
+          <h3 class="sol-title">One platform every team plugs into — <em>zero code intrusion</em>.</h3>
+          <div class="sol-tags">
+            <span class="chip">Aegis Pulse</span><span class="chip">Aegis Core</span><span class="chip">Aegis Cortex</span><span class="chip">Shared registry</span>
+          </div>
+        </div>
+        <p class="sol-desc">Aegis is shared infrastructure for Chaayos — closer to an internal API gateway than a chatbot. Our existing apps embed a lightweight component with no changes to business logic, APIs, or data models. A new team can plug in within a day. Every additional service makes the shared intelligence graph more useful for everyone.</p>
+      </div>
+
+      <div class="sol-row reveal">
+        <div class="sol-num">→ 03</div>
+        <div>
+          <h3 class="sol-title">Anyone builds their own agent. <em>Governed by default</em>.</h3>
+          <div class="sol-tags">
+            <span class="chip">Custom RAG</span><span class="chip">Self-service</span><span class="chip">Tenant-isolated</span><span class="chip">Promotable</span>
+          </div>
+        </div>
+        <p class="sol-desc">A cafe ops, procurement, or finance teammate uploads documents, names a knowledge space, and asks questions — in minutes, no IT ticket. Every personal space is isolated and audit-logged by default. When a space proves valuable, an admin promotes it to a team or service-wide agent with one click — institutional knowledge finally compounds instead of leaking.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================ 3. EXAMPLE ============================ -->
+<section id="example">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">03 — Example</span>
+      <h2>Watch Aegis <span class="em">root-cause a real failure</span>.</h2>
+      <p class="lead">First pilot target: our Purchase Order system. The Diagnostic Agent investigates autonomously — pulling code, traversing the execution graph, reading the live database — and explains exactly what broke, with the files and rows to back it up.</p>
+    </div>
+
+    <div class="trace-wrap reveal">
+      <div class="ex-tabs">
+        <button class="ex-tab active" data-panel="e1">Missing product</button>
+        <button class="ex-tab" data-panel="e2">Validation failure</button>
+        <button class="ex-tab" data-panel="e3">Mapping mismatch</button>
+        <button class="ex-tab" data-panel="e4">Config drift</button>
+      </div>
+
+      <div class="panel active" id="e1">
+        <h3 class="ex-q">Why is product SKU-4471 not visible in the PO creation screen?</h3>
+        <div class="chat">
+          <div class="msg user"><div class="av">U</div><div class="bubble">Procurement says SKU-4471 doesn't show up when creating a new PO. It exists in the catalog. What's happening?</div></div>
+          <div class="msg tool"><div class="av">→</div><div class="bubble"><span class="tool-lbl">code_rag · search</span>query="product visibility filter PO creation" → matched ProductVisibilityService.filterForOrderContext() line 142</div></div>
+          <div class="msg tool"><div class="av">→</div><div class="bubble"><span class="tool-lbl">graph · execution_path</span>POCreationController → ProductService.list() → ProductVisibilityService.filterForOrderContext() → checks Product.active && Product.visibility_scope contains user.region</div></div>
+          <div class="msg tool"><div class="av">→</div><div class="bubble"><span class="tool-lbl">db · read</span>SELECT sku, active, visibility_scope FROM product WHERE sku='SKU-4471' → active=true, visibility_scope=['NORTH','EAST']</div></div>
+          <div class="msg tool"><div class="av">→</div><div class="bubble"><span class="tool-lbl">context · resolve</span>requesting_user.region = 'WEST'</div></div>
+          <div class="msg agent"><div class="av">A</div><div class="bubble">
+            SKU-4471 is active, but its <span class="mono-inline">visibility_scope</span> is set to <span class="mono-inline">NORTH</span> and <span class="mono-inline">EAST</span> only. The requesting user belongs to <span class="mono-inline">WEST</span>, so <span class="mono-inline">filterForOrderContext()</span> correctly excludes it.
+            <div class="verdict"><strong>Recommended action</strong>Update visibility scope in catalog admin to include WEST, or confirm with merchandising whether the exclusion is intentional.</div>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="panel" id="e2">
+        <h3 class="ex-q">PO submission keeps getting rejected with code "VAL_017". Why?</h3>
+        <div class="chat">
+          <div class="msg user"><div class="av">U</div><div class="bubble">User is trying to submit PO #82391 and keeps hitting "VAL_017". The error code isn't documented. What's failing?</div></div>
+          <div class="msg tool"><div class="av">→</div><div class="bubble"><span class="tool-lbl">code_rag · search</span>query="VAL_017 validation" → POValidationRules.java:87 throws when totalAmount &gt; vendorContract.creditLimit</div></div>
+          <div class="msg tool"><div class="av">→</div><div class="bubble"><span class="tool-lbl">db · read</span>SELECT total_amount, vendor_id FROM po WHERE po_id=82391 → total=₹4,82,000, vendor_id=V-208</div></div>
+          <div class="msg tool"><div class="av">→</div><div class="bubble"><span class="tool-lbl">db · read</span>SELECT credit_limit FROM vendor_contract WHERE vendor_id='V-208' AND active=true → ₹4,00,000</div></div>
+          <div class="msg agent"><div class="av">A</div><div class="bubble">
+            PO #82391 totals <span class="mono-inline">₹4,82,000</span>, exceeding vendor V-208's active credit limit of <span class="mono-inline">₹4,00,000</span>. Validation is working as designed — <span class="mono-inline">VAL_017</span> in <span class="mono-inline">POValidationRules.java:87</span>.
+            <div class="verdict"><strong>Recommended action</strong>Split the PO, request a credit-limit revision via vendor management, or split the order across vendors. No code defect.</div>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="panel" id="e3">
+        <h3 class="ex-q">Inventory prices don't match what PO service publishes. Why the drift?</h3>
+        <div class="chat">
+          <div class="msg user"><div class="av">U</div><div class="bubble">PO says ₹212 for SKU-3120 but inventory shows ₹187 after sync. What's happening across the boundary?</div></div>
+          <div class="msg tool"><div class="av">→</div><div class="bubble"><span class="tool-lbl">graph · service_dependency</span>PO_Service.publishPriceEvent() → kafka.topic("price-updates") → Inventory_Service.PriceConsumer → InventoryPriceMapper.fromEvent()</div></div>
+          <div class="msg tool"><div class="av">→</div><div class="bubble"><span class="tool-lbl">code_rag · fetch</span>InventoryPriceMapper.fromEvent() applies: net_price = event.price * (1 - vendor_default_discount)</div></div>
+          <div class="msg tool"><div class="av">→</div><div class="bubble"><span class="tool-lbl">db · read</span>SELECT vendor_default_discount FROM inventory_vendor_config WHERE vendor='V-310' → 0.1179</div></div>
+          <div class="msg agent"><div class="av">A</div><div class="bubble">
+            PO publishes <span class="mono-inline">gross price (₹212)</span>. Inventory mapper applies an <span class="mono-inline">11.79%</span> vendor-default discount, producing <span class="mono-inline">₹187</span>. The systems represent different price stages — the contract between them isn't aligned.
+            <div class="verdict"><strong>Recommended action</strong>Standardize the published price as net-of-discount, or remove the redundant discount step. Schedule contract review with both service owners.</div>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="panel" id="e4">
+        <h3 class="ex-q">PO approvals stopped going out from staging. No deploy. What changed?</h3>
+        <div class="chat">
+          <div class="msg user"><div class="av">U</div><div class="bubble">Approval emails stopped on staging this morning. We didn't deploy. Where do I look?</div></div>
+          <div class="msg tool"><div class="av">→</div><div class="bubble"><span class="tool-lbl">code_rag · search</span>query="approval email send" → ApprovalNotifier.send() reads notification.enabled flag before dispatch</div></div>
+          <div class="msg tool"><div class="av">→</div><div class="bubble"><span class="tool-lbl">db · read</span>SELECT key, value, updated_at, updated_by FROM config_registry WHERE service='po-approval' AND env='staging' AND key='notification.enabled' → value=false, updated_at=2026-05-24 02:14, updated_by=ops-bot</div></div>
+          <div class="msg agent"><div class="av">A</div><div class="bubble">
+            The <span class="mono-inline">notification.enabled</span> flag for <span class="mono-inline">po-approval</span> on staging was flipped to <span class="mono-inline">false</span> at <span class="mono-inline">02:14</span> by <span class="mono-inline">ops-bot</span>. <span class="mono-inline">ApprovalNotifier.send()</span> short-circuits when it's off.
+            <div class="verdict"><strong>Recommended action</strong>Verify whether the change was intentional (scheduled maintenance?). If not, restore the flag via Aegis Console's config registry. Full audit trail available.</div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================ 4. ARCHITECTURE ============================ -->
+<section id="architecture">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">04 — Architecture</span>
+      <h2>Four layers. <span class="em">Top-down governance</span>.</h2>
+      <p class="lead">Every request flows through governance before it reaches the AI runtime. The AI runtime only touches data the policy explicitly allows. Safe to roll out across our production systems.</p>
+    </div>
+
+    <div class="arch">
+      <div class="arch-row reveal">
+        <div class="arch-num">L1</div>
+        <div class="arch-name"><small>Interaction</small><strong>Aegis Pulse</strong></div>
+        <p class="arch-desc">Framework-agnostic embedded UI that drops into any Chaayos app. Captures user input and injects runtime context (service, user, screen, environment) before forwarding to Aegis Core. Zero changes to the host app's business logic.</p>
+      </div>
+      <div class="arch-row reveal">
+        <div class="arch-num">L2</div>
+        <div class="arch-name"><small>Governance</small><strong>Aegis Core</strong></div>
+        <p class="arch-desc">Central nervous system. Java / Spring Boot. Configuration registry, hierarchical policy resolution, intent routing, tenant isolation, and context resolution per request.</p>
+      </div>
+      <div class="arch-row reveal">
+        <div class="arch-num">L3</div>
+        <div class="arch-name"><small>AI Runtime</small><strong>Aegis Cortex</strong></div>
+        <p class="arch-desc">Centralized execution engine. Hosts all specialized agents (Diagnostic, Analysis, SQL, Support, Custom RAG). Manages tools, runs retrieval-augmented reasoning, abstracts model providers (OpenAI, Anthropic).</p>
+      </div>
+      <div class="arch-row reveal">
+        <div class="arch-num">L4</div>
+        <div class="arch-name"><small>Intelligence</small><strong>Live retrieval</strong></div>
+        <p class="arch-desc">Code RAG (Spoon / JavaParser + Neo4j graph + pgvector embeddings), read-only database verification, log and trace retrieval (Phase 2+). All sources are governed and audit-logged.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================ 5. GOVERNANCE + METRICS ============================ -->
+<section id="governance">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">05 — Governance & Metrics</span>
+      <h2>Read-only. Multi-tenant. <span class="em">Fully auditable</span>.</h2>
+      <p class="lead">Built to roll out safely across Chaayos production systems. Every initial phase is read-only. Every action is logged. Every agent sees only what policy permits.</p>
+    </div>
+
+    <div class="gov-grid">
+      <div class="gov reveal">
+        <div class="gov-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h4>Multi-tenant isolation</h4>
+        <p>Strict separation by service, environment, user, and data source. No data leaks between Chaayos teams, services, or roles.</p>
+      </div>
+      <div class="gov reveal">
+        <div class="gov-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <h4>Read-only by design</h4>
+        <p>No write, update, or delete against any Chaayos system. Autonomous remediation is explicitly out of scope for the initial phases.</p>
+      </div>
+      <div class="gov reveal">
+        <div class="gov-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <h4>Policy-based tools</h4>
+        <p>Agents access only the tools and data sources permitted by service, role, and environment policy.</p>
+      </div>
+      <div class="gov reveal">
+        <div class="gov-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+        <h4>Full audit trail</h4>
+        <p>Every query, retrieval, tool call, raw prompt, and model response is logged. Compliance and forensics ready.</p>
+      </div>
+    </div>
+
+    <div class="metrics reveal">
+      <div class="metric"><div class="val">&gt;60%</div><div class="lbl">Faster engineer investigations</div></div>
+      <div class="metric"><div class="val">&gt;40%</div><div class="lbl">Fewer support escalations</div></div>
+      <div class="metric"><div class="val">&gt;90%</div><div class="lbl">AI answers we can audit</div></div>
+      <div class="metric"><div class="val">&lt;1d</div><div class="lbl">Onboard a new Chaayos service</div></div>
+      <div class="metric"><div class="val">100%</div><div class="lbl">No host-app code changes</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================ CLOSER ============================ -->
+<section id="closer" class="closer">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="pill"><span class="dot"></span>Ready for Chaayos tech leadership review</span>
+      <h2 style="margin-top:32px">Aegis is <span class="em">not another chatbot</span>.</h2>
+      <p class="lead">It is our shared internal AI infrastructure — consumed by Chaayos apps, governed by our policies, and driven by our live operational context. The value compounds as more of our services onboard.</p>
+      <div class="hero-cta-row">
+        <a class="cta" href="#problem">Re-read the PRD
+          <span class="arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="brand">
+    <span class="hex"></span>
+    <span>Aegis · Internal PRD v1.0</span>
+  </div>
+  <div>Chaayos Tech · Confidential · Submitted for Review · May 2026</div>
+</footer>
+
+<script>
+  // Tab switching for example traces
+  document.querySelectorAll('.ex-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.ex-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.panel).classList.add('active');
+    });
+  });
+
+  // Reveal on scroll
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
